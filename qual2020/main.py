@@ -32,3 +32,6 @@ for i in range(L):
 # give each lib a rank decided by total score of that library divided by no of days it takes to sign up
 # k = (rate * no of days left)
 # score = (score of top k books without repetitions)
+#Hi there  hi 
+
+
