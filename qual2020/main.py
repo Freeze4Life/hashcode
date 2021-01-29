@@ -7,7 +7,7 @@ class Library:
         self.time = time
         self.rate = rate
         self.books = books
-        self.score = 0
+        self.value = 0
     def __str__(self):
         return f"ID:{self.id}"
     def arrange_books(self):
@@ -44,7 +44,13 @@ for i in range(L):
 # score = (score of top k books without repetitions)
 comp_books = list()
 for time in range(D,0,-1):
+    ## TODO: only consider libs whose sign up time less than days left
     for lib in libraries:
         lib.arrange_books()
         quant = (time-lib.time)*lib.rate
         lib.value = sum([temp.score for temp in lib.books[:quant]])/lib.time
+    libraries = sorted(libraries,reverse=True,key=(lambda x: x.value))
+    time = D-libraries[0].time+1
+    comp_books.append(libraries[0].books[:quant])
+    comp_lib.append(libraries[0].id)
+    libraries.pop(0)
