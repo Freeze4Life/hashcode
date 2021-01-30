@@ -1,4 +1,4 @@
-#NOTE classes
+# Classes
 
 class Library:
 
@@ -15,20 +15,12 @@ class Library:
 
     def worth(self, days_rem):
         # sum of scores of books for (rem days - signup time) indices / signup time
-        return sum(list(map(lambda book_id: Library.book_scores[book_id], self.books_id_arr[ : (days_rem-self.time) ]))) / self.time
-
-
-# class Book:
-#     def __init__(self, id, score):
-#         self.id = id
-#         self.score = score
-
-# TIME = int()
+        return sum(list(map(lambda book_id: Library.book_scores[book_id], self.books_id_arr[ : ((days_rem-self.time)*self.rate) ]))) / self.time
 
 
 
 
-#NOTE Functions
+# Functions
 
 def sort_book_indices(book_ids):
         books_dict = dict()
@@ -57,16 +49,16 @@ def main():
 
         book_ids = list(map(int, input().split()))
         sorted_book_ids = sort_book_indices(book_ids)
-        
+
         libraries.append(Library(i, no_of_books, signup_time,max_books_per_day, sorted_book_ids))
 
-
-    print(libraries[1].books_id_arr)
-
-
+    print(libraries[0].books_id_arr)
+    print(libraries[0].worth(4))
 
 
 
+
+# main exec
 if __name__ == "__main__":
     main()
 
