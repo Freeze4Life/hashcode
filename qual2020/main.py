@@ -1,4 +1,4 @@
-import operator
+#import operator
 
 class Library:
     def __init__(self,id,n_books,time,rate,books):
@@ -8,6 +8,7 @@ class Library:
         self.rate = rate
         self.books = books
         self.value = 0
+        self.scanned = []
     def __str__(self):
         return f"ID:{self.id}"
     def arrange_books(self):
@@ -25,7 +26,7 @@ TIME = int()
 
 #INPUT
 B,L,D = tuple(map(int,input().split()))
-TIME = D
+time = D
 scores = list(map(int,input().split()))
 books = list()
 libraries = list()
@@ -38,19 +39,27 @@ for i in range(L):
     lib_books = [books[i] for i in bookids]
     libraries.append(Library(i,N,T,M,lib_books))
 
-#LOGIC
-# give each lib a rank decided by total score of that library divided by no of days it takes to sign up
-# k = (rate * no of days left)
-# score = (score of top k books without repetitions)
-comp_books = list()
-for time in range(D,0,-1):
-    ## TODO: only consider libs whose sign up time less than days left
+comp_books = set()
+comp_lib = list()
+while time>0 and len(libraries)>0:
+    ## DONE: only consider libs whose sign up time less than days left
     for lib in libraries:
+        if lib.time>time:
+            continue
         lib.arrange_books()
         quant = (time-lib.time)*lib.rate
         lib.value = sum([temp.score for temp in lib.books[:quant]])/lib.time
     libraries = sorted(libraries,reverse=True,key=(lambda x: x.value))
-    time = D-libraries[0].time+1
-    comp_books.append(libraries[0].books[:quant])
-    comp_lib.append(libraries[0].id)
-    libraries.pop(0)
+    used_lib = libraries.pop(0)
+    quant = (time-used_lib.time)*used_lib.rate
+    time = D-used_lib.time
+    used_lib.scanned = used_lib.books[:quant]
+    comp_books.add(frozenset(used_lib.scanned))
+    comp_lib.append((used_lib.id,used_lib.scanned))
+
+print(len(comp_lib))
+for (lib,books) in comp_lib:
+    print(lib,len(books))
+    for book in books:
+        print(book.id,end=" ")
+    print()
